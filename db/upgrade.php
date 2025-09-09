@@ -31,7 +31,8 @@ use tool_usertours\tour;
  * @param int $oldversion The old version of the user tours plugin
  * @return bool
  */
-function xmldb_tool_usertours_upgrade($oldversion) {
+function xmldb_tool_usertours_upgrade($oldversion)
+{
     // Automatically generated Moodle v4.2.0 release upgrade line.
     // Put any upgrade step following this.
 
@@ -54,6 +55,22 @@ function xmldb_tool_usertours_upgrade($oldversion) {
 
     // Automatically generated Moodle v5.0.0 release upgrade line.
     // Put any upgrade step following this.
+
+    if ($oldversion < 2025090900) {
+        global $DB;
+        // Add ondemand field to tool_usertours_tours table.
+        $dbman = $DB->get_manager();
+        $table = new xmldb_table('tool_usertours_tours');
+        $field = new xmldb_field('ondemand', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'pathmatch');
+
+        // Conditionally launch add field ondemand.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Usertours savepoint reached.
+        upgrade_plugin_savepoint(true, 2025090900, 'tool', 'usertours');
+    }
 
     return true;
 }
