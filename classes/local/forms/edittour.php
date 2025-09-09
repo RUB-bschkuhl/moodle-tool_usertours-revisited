@@ -83,6 +83,12 @@ class edittour extends \moodleform {
         $mform->addElement('checkbox', 'ondemand', get_string('ondemand', 'tool_usertours'));
         $mform->addHelpButton('ondemand', 'ondemand', 'tool_usertours');
 
+        // Mock field that appears only when ondemand is checked
+        $mform->addElement('text', 'trigger_button_text', get_string('trigger_button_text', 'tool_usertours'), ['size' => '40']);
+        $mform->setType('trigger_button_text', PARAM_TEXT);
+        $mform->addHelpButton('trigger_button_text', 'trigger_button_text', 'tool_usertours');
+        $mform->hideIf('trigger_button_text', 'ondemand', 'notchecked');
+
         $mform->addElement('checkbox', 'enabled', get_string('tourisenabled', 'tool_usertours'));
 
         $mform->addElement('text', 'endtourlabel', get_string('endtourlabel', 'tool_usertours'), ['size' => '80']);

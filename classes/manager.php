@@ -362,9 +362,15 @@ class manager {
             $tour->set_description($data->description);
             $tour->set_pathmatch($data->pathmatch);
             $tour->set_enabled(!empty($data->enabled));
+            $tour->set_ondemand(!empty($data->ondemand));
             $tour->set_endtourlabel($data->endtourlabel);
             $tour->set_display_step_numbers(!empty($data->displaystepnumbers));
             $tour->set_showtourwhen($data->showtourwhen);
+
+            // Handle ondemand-specific configuration.
+            if (!empty($data->ondemand) && !empty($data->trigger_button_text)) {
+                $tour->set_config('trigger_button_text', $data->trigger_button_text);
+            }
 
             foreach (configuration::get_defaultable_keys() as $key) {
                 $tour->set_config($key, $data->$key);

@@ -84,6 +84,11 @@ class tour {
     protected $enabled;
 
     /**
+     * @var $ondemand The tour on-demand state.
+     */
+    protected $ondemand;
+
+    /**
      * @var $endtourlabel The end tour label.
      */
     protected $endtourlabel;
@@ -188,6 +193,7 @@ class tour {
         }
         $this->pathmatch    = $record->pathmatch;
         $this->enabled      = $record->enabled;
+        $this->ondemand     = $record->ondemand ?? 0;
         if (isset($record->sortorder)) {
             $this->sortorder = $record->sortorder;
         }
@@ -329,6 +335,37 @@ class tour {
     }
 
     /**
+     * The on-demand state of the tour.
+     *
+     * @return  int
+     */
+    public function get_ondemand() {
+        return $this->ondemand;
+    }
+
+    /**
+     * Whether the tour is currently on-demand.
+     *
+     * @return  boolean
+     */
+    public function is_ondemand() {
+        return ($this->ondemand == self::ENABLED);
+    }
+
+    /**
+     * Set the on-demand state of the tour to the specified value.
+     *
+     * @param   boolean     $value      The new state.
+     * @return  $this
+     */
+    public function set_ondemand($value) {
+        $this->ondemand = $value;
+        $this->dirty = true;
+
+        return $this;
+    }
+
+    /**
      * The end tour label for the tour.
      *
      * @return string
@@ -424,6 +461,7 @@ class tour {
             'description'   => $this->description,
             'pathmatch'     => $this->pathmatch,
             'enabled'       => $this->enabled,
+            'ondemand'      => $this->ondemand,
             'sortorder'     => $this->sortorder,
             'endtourlabel'  => $this->endtourlabel,
             'configdata'    => json_encode($this->config),

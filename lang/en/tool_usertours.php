@@ -60,6 +60,10 @@ $string['duplicatetour_name'] = '{$a} (copy)';
 $string['editstep'] = 'Editing "{$a}"';
 $string['tourisenabled'] = 'Tour is enabled';
 $string['enabled'] = 'Enabled';
+$string['ondemand'] = 'On demand';
+$string['ondemand_help'] = 'When enabled, this tour will only be started manually by the user through a tour button or other trigger. When disabled, the tour will start automatically based on its filters.';
+$string['trigger_button_text'] = 'Trigger button text';
+$string['trigger_button_text_help'] = 'Custom text for the button that users will click to start this on-demand tour. If left empty, a default text will be used.';
 $string['endtourlabel'] = 'End tour button\'s label';
 $string['endtourlabel_help'] = 'You can optionally specify a custom label for the end tour button. The default label is \'Got it\' for single-step and \'End tour\' for multiple-step tours.
 
