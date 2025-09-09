@@ -83,11 +83,40 @@ class edittour extends \moodleform {
         $mform->addElement('checkbox', 'ondemand', get_string('ondemand', 'tool_usertours'));
         $mform->addHelpButton('ondemand', 'ondemand', 'tool_usertours');
 
-        // Mock field that appears only when ondemand is checked
-        $mform->addElement('text', 'trigger_button_text', get_string('trigger_button_text', 'tool_usertours'), ['size' => '40']);
-        $mform->setType('trigger_button_text', PARAM_TEXT);
-        $mform->addHelpButton('trigger_button_text', 'trigger_button_text', 'tool_usertours');
-        $mform->hideIf('trigger_button_text', 'ondemand', 'notchecked');
+        $mform->addElement('select', 'trigger_type', get_string('trigger_type', 'tool_usertours'), [
+            'button' => get_string('button', 'tool_usertours'),
+            'event' => get_string('event', 'tool_usertours'),
+        ]);
+        $mform->setDefault('trigger_type', 'button');
+        $mform->addHelpButton('trigger_type', 'trigger_type', 'tool_usertours');
+        $mform->hideIf('trigger_type', 'ondemand', 'notchecked');
+
+        $mform->addElement('select', 'trigger_type_select', get_string('trigger_type_select', 'tool_usertours'), [
+            'event' => get_string('event', 'tool_usertours'),
+            'placement' => get_string('placement', 'tool_usertours'),
+        ]);
+        $mform->setDefault('trigger_type_select', 'event');
+        $mform->addHelpButton('trigger_type_select', 'trigger_type_select', 'tool_usertours');
+        $mform->hideIf('trigger_type_select', 'ondemand', 'notchecked');
+        $mform->hideIf('trigger_type_select', 'trigger_type', 'notchecked');
+
+        $mform->addElement('select', 'trigger_type_event', get_string('trigger_tytrigger_type_eventpe_select_select', 'tool_usertours'), [
+            //TODO event list placeholder
+        ]);
+        // TODO $mform->setDefault('trigger_type_event', 'event1');
+        $mform->addHelpButton('trigger_type_event', 'trigger_type_event', 'tool_usertours');
+        $mform->hideIf('trigger_type_select', 'ondemand', 'notchecked');
+        $mform->hideIf('trigger_type_event', 'trigger_type_select', 'notchecked');
+        $mform->hideIf('trigger_type_event', 'event', 'neq', 'event');
+
+        $mform->addElement('select', 'trigger_type_placement', get_string('trigger_type_placement', 'tool_usertours'), [
+            //TODO placement list placeholder
+        ]);
+        // TODO $mform->setDefault('trigger_type_placement_list', 'placement1');
+        $mform->addHelpButton('trigger_type_placement', 'trigger_type_placement', 'tool_usertours');
+        $mform->hideIf('trigger_type_placement', 'ondemand', 'notchecked');
+        $mform->hideIf('trigger_type_placement', 'trigger_type_select', 'notchecked');
+        $mform->hideIf('trigger_type_placement', 'placement', 'neq', 'placement');
 
         $mform->addElement('checkbox', 'enabled', get_string('tourisenabled', 'tool_usertours'));
 
