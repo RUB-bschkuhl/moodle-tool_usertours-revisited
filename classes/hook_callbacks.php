@@ -17,6 +17,7 @@
 namespace tool_usertours;
 
 use core\hook\output\before_footer_html_generation;
+use core\hook\navigation\secondary_extend;
 
 /**
  * Hook callbacks for usertours.
@@ -25,13 +26,38 @@ use core\hook\output\before_footer_html_generation;
  * @copyright  2024 Andrew Lyons <andrew@nicols.co.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class hook_callbacks {
+class hook_callbacks
+{
     /**
      * Bootstrap the usertours library.
      *
      * @param before_footer_html_generation $hook
      */
-    public static function before_footer_html_generation(before_footer_html_generation $hook): void {
+    public static function before_footer_html_generation(before_footer_html_generation $hook): void
+    {
         \tool_usertours\helper::bootstrap();
+    }
+
+    /**
+     * Extends secondary navigation
+     *
+     * @param \core\hook\navigation\secondary_extend $hook
+     */
+    public static function secondary_extend(\core\hook\navigation\secondary_extend $hook): void
+    {
+        $secondarynav = $hook->get_secondaryview();
+        //TODO depending on context? 
+        //TODO edit node to open tour config with params instead
+        $node = \navigation_node::create(
+            '[i18n-Todo] Teacher Blocks',
+            new \moodle_url('/tool/usertours/configure.php'),
+            // new \moodle_url('/blocks/teacher_tours/configure.php'),
+            \navigation_node::TYPE_CONTAINER,
+            null,
+            'teachertours-1'
+        );
+        if (isloggedin()) {
+            $secondarynav->add_node($node);
+        }
     }
 }

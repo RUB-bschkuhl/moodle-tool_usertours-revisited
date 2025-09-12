@@ -27,7 +27,8 @@ use core\notification;
  * @copyright  2016 Andrew Nicols <andrew@nicols.co.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class manager {
+class manager
+{
     /**
      * @var ACTION_LISTTOURS      The action to get the list of tours.
      */
@@ -133,7 +134,8 @@ class manager {
      *
      * @param string $action
      */
-    protected function setup_admin_externalpage(string $action): void {
+    protected function setup_admin_externalpage(string $action): void
+    {
         admin_externalpage_setup('tool_usertours/tours', '', array_filter([
             'action' => $action,
             'id' => optional_param('id', 0, PARAM_INT),
@@ -147,13 +149,16 @@ class manager {
      *
      * @param   string  $action     The action to perform.
      */
-    public function execute($action) {
+    public function execute($action)
+    {
         global $PAGE;
+        //TODO do i need this in context course or module?
         $this->setup_admin_externalpage($action);
+        //TODO set primary active tab based on contextid: courseid or moduleid
         $PAGE->set_primary_active_tab('siteadminnode');
-
         // Add the main content.
         switch ($action) {
+            //TODO add optional_param for contextid: courseid or moduleid
             case self::ACTION_NEWTOUR:
             case self::ACTION_EDITTOUR:
                 $this->edit_tour(optional_param('id', null, PARAM_INT));
@@ -220,7 +225,8 @@ class manager {
      *
      * @param   string  $title     The title to display.
      */
-    protected function header($title = null) {
+    protected function header($title = null)
+    {
         global $OUTPUT;
 
         // Print the page heading.
@@ -238,7 +244,8 @@ class manager {
      *
      * @return void
      */
-    protected function footer() {
+    protected function footer()
+    {
         global $OUTPUT;
 
         echo $OUTPUT->footer();
@@ -247,7 +254,8 @@ class manager {
     /**
      * Print the the list of tours.
      */
-    protected function print_tour_list() {
+    protected function print_tour_list()
+    {
         global $PAGE, $OUTPUT;
 
         $this->header();
@@ -275,16 +283,16 @@ class manager {
             (object) [
                 'link'  => new \moodle_url('https://moodle.net/search', ['q' => 'user tours']),
                 'linkproperties' => [
-                        'target' => '_blank',
-                    ],
+                    'target' => '_blank',
+                ],
                 'img'   => 'i/tour-shared',
                 'title' => get_string('sharedtourslink', 'tool_usertours'),
             ],
         ];
 
         echo \html_writer::start_tag('div', [
-                'class' => 'tour-actions mt-3',
-            ]);
+            'class' => 'tour-actions mt-3',
+        ]);
 
         echo \html_writer::start_tag('ul');
         foreach ($actions as $config) {
@@ -313,7 +321,8 @@ class manager {
      * @param   int         $id     The ID of the tour
      * @return string
      */
-    protected function get_edit_tour_link($id = null) {
+    protected function get_edit_tour_link($id = null)
+    {
         $addlink = helper::get_edit_tour_link($id);
         return \html_writer::link($addlink, get_string('newtour', 'tool_usertours'));
     }
@@ -323,7 +332,8 @@ class manager {
      *
      * @param   int         $id     The ID of the tour
      */
-    protected function print_edit_tour_link($id = null) {
+    protected function print_edit_tour_link($id = null)
+    {
         echo $this->get_edit_tour_link($id);
     }
 
@@ -332,7 +342,8 @@ class manager {
      *
      * @return string
      */
-    protected function get_import_tour_link() {
+    protected function get_import_tour_link()
+    {
         $importlink = helper::get_import_tour_link();
         return \html_writer::link($importlink, get_string('importtour', 'tool_usertours'));
     }
@@ -342,7 +353,8 @@ class manager {
      *
      * @param   int         $id     The ID of the tour
      */
-    protected function edit_tour($id = null) {
+    protected function edit_tour($id = null)
+    {
         global $PAGE;
         if ($id) {
             $tour = tour::instance($id);
@@ -415,7 +427,8 @@ class manager {
      *
      * @param   int         $id     The ID of the tour
      */
-    protected function export_tour($id) {
+    protected function export_tour($id)
+    {
         $tour = tour::instance($id);
 
         // Grab the full data record.
@@ -448,7 +461,8 @@ class manager {
     /**
      * Handle tour import.
      */
-    protected function import_tour() {
+    protected function import_tour()
+    {
         global $PAGE;
         $PAGE->navbar->add(get_string('importtour', 'tool_usertours'), helper::get_import_tour_link());
 
@@ -474,7 +488,8 @@ class manager {
      *
      * @param   int         $tourid     The ID of the tour to display.
      */
-    protected function view_tour($tourid) {
+    protected function view_tour($tourid)
+    {
         global $PAGE;
         $tour = helper::get_tour($tourid);
         $tourname = helper::get_string_from_input($tour->get_name());
@@ -483,13 +498,13 @@ class manager {
 
         $this->header($tourname);
         echo \html_writer::span(get_string('viewtour_info', 'tool_usertours', [
-                'tourname'  => $tourname,
-                'path'      => $tour->get_pathmatch(),
-            ]));
+            'tourname'  => $tourname,
+            'path'      => $tour->get_pathmatch(),
+        ]));
         echo \html_writer::div(get_string('viewtour_edit', 'tool_usertours', [
-                'editlink'  => $tour->get_edit_link()->out(),
-                'resetlink' => $tour->get_reset_link()->out(),
-            ]));
+            'editlink'  => $tour->get_edit_link()->out(),
+            'resetlink' => $tour->get_reset_link()->out(),
+        ]));
 
         $table = new table\step_list($tourid);
         foreach ($tour->get_steps() as $step) {
@@ -510,7 +525,8 @@ class manager {
      *
      * @param   int         $tourid     The ID of the tour to duplicate.
      */
-    protected function duplicate_tour($tourid) {
+    protected function duplicate_tour($tourid)
+    {
         require_sesskey();
 
         $tour = helper::get_tour($tourid);
@@ -544,7 +560,8 @@ class manager {
      *
      * @param   int         $tourid     The ID of the tour to display.
      */
-    protected function show_tour($tourid) {
+    protected function show_tour($tourid)
+    {
         $this->show_hide_tour($tourid, 1);
     }
 
@@ -553,7 +570,8 @@ class manager {
      *
      * @param   int         $tourid     The ID of the tour to display.
      */
-    protected function hide_tour($tourid) {
+    protected function hide_tour($tourid)
+    {
         $this->show_hide_tour($tourid, 0);
     }
 
@@ -563,7 +581,8 @@ class manager {
      * @param   int         $tourid     The ID of the tour to display.
      * @param   int         $visibility The intended visibility.
      */
-    protected function show_hide_tour($tourid, $visibility) {
+    protected function show_hide_tour($tourid, $visibility)
+    {
         global $DB;
 
         require_sesskey();
@@ -580,7 +599,8 @@ class manager {
      *
      * @param   int         $tourid     The ID of the tour to remove.
      */
-    protected function delete_tour($tourid) {
+    protected function delete_tour($tourid)
+    {
         require_sesskey();
 
         $tour = tour::instance($tourid);
@@ -594,7 +614,8 @@ class manager {
      *
      * @param   int         $tourid     The ID of the tour to remove.
      */
-    protected function reset_tour_for_all($tourid) {
+    protected function reset_tour_for_all($tourid)
+    {
         require_sesskey();
 
         $tour = tour::instance($tourid);
@@ -609,7 +630,8 @@ class manager {
      * @param   bool        $reset      Forcibly update the current tours
      * @return  array
      */
-    public static function get_current_tours($reset = false): array {
+    public static function get_current_tours($reset = false): array
+    {
         global $PAGE;
 
         static $tours = false;
@@ -627,7 +649,8 @@ class manager {
      * @param   moodle_url  $pageurl        The URL to match.
      * @return  array
      */
-    public static function get_matching_tours(\moodle_url $pageurl): array {
+    public static function get_matching_tours(\moodle_url $pageurl): array
+    {
         global $PAGE;
 
         if (\core_user::awaiting_action()) {
@@ -658,7 +681,8 @@ class manager {
      * @param   string      $json           The tour configuration.
      * @return  tour
      */
-    public static function import_tour_from_json($json) {
+    public static function import_tour_from_json($json)
+    {
         $tourconfig = json_decode($json);
 
         // We do not use this yet - we may do in the future.
@@ -690,7 +714,8 @@ class manager {
      *
      * @return  renderer
      */
-    protected function get_renderer() {
+    protected function get_renderer()
+    {
         global $PAGE;
         return $PAGE->get_renderer('tool_usertours');
     }
@@ -702,7 +727,8 @@ class manager {
      * @param   int     $stepid     The ID of the step.
      * @return  string
      */
-    protected function print_edit_step_link($tourid, $stepid = null) {
+    protected function print_edit_step_link($tourid, $stepid = null)
+    {
         $addlink = helper::get_edit_step_link($tourid, $stepid);
         $attributes = [];
         if (empty($stepid)) {
@@ -716,7 +742,8 @@ class manager {
      *
      * @param   int     $id     The step to edit.
      */
-    protected function edit_step($id) {
+    protected function edit_step($id)
+    {
         global $PAGE;
 
         if (isset($id)) {
@@ -764,7 +791,8 @@ class manager {
      *
      * @param   int     $id     The tour to move.
      */
-    protected function move_tour($id) {
+    protected function move_tour($id)
+    {
         require_sesskey();
 
         $direction = required_param('direction', PARAM_INT);
@@ -782,11 +810,12 @@ class manager {
      *
      * @param   int     $direction
      */
-    protected static function _move_tour(tour $tour, $direction) {
+    protected static function _move_tour(tour $tour, $direction)
+    {
         // We can't move the first tour higher, nor the last tour any lower.
         if (
             ($tour->is_first_tour() && $direction == helper::MOVE_UP) ||
-                ($tour->is_last_tour() && $direction == helper::MOVE_DOWN)
+            ($tour->is_last_tour() && $direction == helper::MOVE_DOWN)
         ) {
             return;
         }
@@ -813,7 +842,8 @@ class manager {
      *
      * @param   int     $id     The step to move.
      */
-    protected function move_step($id) {
+    protected function move_step($id)
+    {
         require_sesskey();
 
         $direction = required_param('direction', PARAM_INT);
@@ -846,7 +876,8 @@ class manager {
      *
      * @param   int         $stepid     The ID of the step to remove.
      */
-    protected function delete_step($stepid) {
+    protected function delete_step($stepid)
+    {
         require_sesskey();
 
         $step = step::instance($stepid);
@@ -860,7 +891,8 @@ class manager {
      * Make sure all of the default tours that are shipped with Moodle are created
      * and up to date with the latest version.
      */
-    public static function update_shipped_tours() {
+    public static function update_shipped_tours()
+    {
         global $DB, $CFG;
 
         // A list of tours that are shipped with Moodle. They are in

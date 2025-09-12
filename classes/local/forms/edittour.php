@@ -58,7 +58,21 @@ class edittour extends \moodleform {
      * Form definition.
      */
     public function definition() {
+        global $PAGE;
+        
         $mform = $this->_form;
+        
+        // Get the current page context to determine available fields
+        $context = $PAGE->context;
+        $contextlevel = $context->contextlevel;
+        
+        // Check if we're in a course context vs system/admin context
+        $isincoursecontext = ($contextlevel == CONTEXT_COURSE);
+        $isinsystemcontext = ($contextlevel == CONTEXT_SYSTEM);
+        $isinmodulecontext = ($contextlevel == CONTEXT_MODULE);
+        
+        //TODO depending on the context (course or site) there should be different fields
+        
 
         // ID of existing tour.
         $mform->addElement('hidden', 'id');
@@ -91,16 +105,24 @@ class edittour extends \moodleform {
         $mform->addHelpButton('trigger_type', 'trigger_type', 'tool_usertours');
         $mform->hideIf('trigger_type', 'ondemand', 'notchecked');
 
-        $mform->addElement('select', 'trigger_type_select', get_string('trigger_type_select', 'tool_usertours'), [
-            'event' => get_string('event', 'tool_usertours'),
-            'placement' => get_string('placement', 'tool_usertours'),
-        ]);
-        $mform->setDefault('trigger_type_select', 'event');
-        $mform->addHelpButton('trigger_type_select', 'trigger_type_select', 'tool_usertours');
-        $mform->hideIf('trigger_type_select', 'ondemand', 'notchecked');
-        $mform->hideIf('trigger_type_select', 'trigger_type', 'notchecked');
+         // Add course-specific options if in course context
+         if ($isincoursecontext) {
+            $test = 0;
+            //TODO Add list of event triggers and placements depending on course elements
+         }
+         
+         // Possibly add admin-specific options if in system context
+         if ($isinsystemcontext) {
+         }
+         
+         $mform->addElement('select', 'trigger_type_select', get_string('trigger_type_select', 'tool_usertours'), $triggeroptions);
+         $mform->setDefault('trigger_type_select', 'event');
+         $mform->addHelpButton('trigger_type_select', 'trigger_type_select', 'tool_usertours');
+         $mform->hideIf('trigger_type_select', 'ondemand', 'notchecked');
+         $mform->hideIf('trigger_type_select', 'trigger_type', 'notchecked');
 
-        $mform->addElement('select', 'trigger_type_event', get_string('trigger_tytrigger_type_eventpe_select_select', 'tool_usertours'), [
+        //Adds a list of placement options
+        $mform->addElement('select', 'trigger_type_event', get_string('trigger_type_event', 'tool_usertours'), [
             //TODO event list placeholder
         ]);
         // TODO $mform->setDefault('trigger_type_event', 'event1');
@@ -109,14 +131,15 @@ class edittour extends \moodleform {
         $mform->hideIf('trigger_type_event', 'trigger_type_select', 'notchecked');
         $mform->hideIf('trigger_type_event', 'event', 'neq', 'event');
 
-        $mform->addElement('select', 'trigger_type_placement', get_string('trigger_type_placement', 'tool_usertours'), [
-            //TODO placement list placeholder
+        //Adds a list of placement options
+        $mform->addElement('select', 'trigger_type_button', get_string('trigger_type_button', 'tool_usertours'), [
+            //TODO get list of course elements
         ]);
-        // TODO $mform->setDefault('trigger_type_placement_list', 'placement1');
-        $mform->addHelpButton('trigger_type_placement', 'trigger_type_placement', 'tool_usertours');
-        $mform->hideIf('trigger_type_placement', 'ondemand', 'notchecked');
-        $mform->hideIf('trigger_type_placement', 'trigger_type_select', 'notchecked');
-        $mform->hideIf('trigger_type_placement', 'placement', 'neq', 'placement');
+        // TODO $mform->setDefault('trigger_type_button_list', 'placement1');
+        $mform->addHelpButton('trigger_type_button', 'trigger_type_button', 'tool_usertours');
+        $mform->hideIf('trigger_type_button', 'ondemand', 'notchecked');
+        $mform->hideIf('trigger_type_button', 'trigger_type_select', 'notchecked');
+        $mform->hideIf('trigger_type_button', 'placement', 'neq', 'placement');
 
         $mform->addElement('checkbox', 'enabled', get_string('tourisenabled', 'tool_usertours'));
 

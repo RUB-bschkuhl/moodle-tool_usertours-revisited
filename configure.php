@@ -27,6 +27,7 @@ require_once($CFG->libdir . '/adminlib.php');
 
 $action = optional_param('action', \tool_usertours\manager::ACTION_LISTTOURS, PARAM_ALPHANUMEXT);
 
+//TODO get current context, set optional param -> id - meaning course id
 $pluginmanager = new \tool_usertours\manager();
 $PAGE->set_context(context_system::instance());
 

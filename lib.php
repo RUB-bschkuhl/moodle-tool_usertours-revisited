@@ -34,7 +34,20 @@ use tool_usertours\helper;
  * @return \core\output\inplace_editable
  */
 function tool_usertours_inplace_editable($itemtype, $itemid, $newvalue) {
+    global $PAGE, $SESSION;
+    $url = $_SERVER['HTTP_REFERER'];
     $context = \context_system::instance();
+
+    // TODO: add parameter to configure an load it here from referer.
+    $courseid = 2;
+    if (str_contains($url, 'teacher_tours/configure.php')) {
+        // Load the item.
+        $checktour = helper::get_tour($itemid);
+        if (str_contains($checktour->get_pathmatch(), '/course/view.php?id=' . $courseid)) {
+            $context = \context_course::instance($courseid);
+        }
+    }
+
     external_api::validate_context($context);
     require_capability('tool/usertours:managetours', $context);
 

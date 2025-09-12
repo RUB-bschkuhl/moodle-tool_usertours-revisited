@@ -30,4 +30,9 @@ $callbacks = [
         'callback' => \tool_usertours\hook_callbacks::class . '::before_footer_html_generation',
         'priority' => 0,
     ],
+    [
+        'hook' => core\hook\navigation\secondary_extend::class,
+        'callback' => [\tool_usertours\hook_callbacks::class, 'secondary_extend'],
+        'priority' => 500,
+    ],
 ];
